@@ -54,12 +54,10 @@
                     <a class="nav-link" href="{{route('etudiant.welcome')}}">@lang('Home')</a>
                 </li>
                 @auth
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('etudiant.index')}}">@lang('Students List')</a>
-                </li>
+                
                 <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
-                                aria-expanded="false"> forum </a>
+                                aria-expanded="false"> Forum </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{route('article.index')}}">@lang('List of articles')</a></li>
                                 <li><a class="dropdown-item" href="{{route('article.create')}}">@lang('Add an articles')</a></li>
@@ -69,7 +67,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('fichier.index')}}">@lang('Document area')</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('etudiant.index')}}">Admin -@lang('Students List')</a>
+                </li>
 
                 @endauth
 
@@ -100,7 +100,6 @@
                             
                             </ul>
                 </li>
-                
             </ul>
         </div>
     </nav>

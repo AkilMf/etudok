@@ -67,7 +67,7 @@ class ArticleController extends Controller
 
         Article::create($newArticle);
 
-        return redirect()->route('article.index')->withSuccess('Article ajouté avec succès !');
+        return redirect()->route('article.index')->withSuccess(trans('successfully') . ' ' . trans('Added'));
     }
 
     /**
@@ -138,7 +138,7 @@ class ArticleController extends Controller
 
         ]);
 
-        return redirect()->route('article.index')->withSuccess('Article Modifiée avec succès !');
+        return redirect()->route('article.index')->withSuccess(trans('successfully') . ' ' . trans('Modified'));
     }
 
     /**
@@ -150,6 +150,6 @@ class ArticleController extends Controller
         abort_unless($article->etudiant_id === Auth::user()->id, 401);
 
         $article->delete();
-        return redirect()->route('article.index')->with('success', 'Article deleted successfully!');
+        return redirect()->route('article.index')->with('success', trans('successfully') . ' ' . trans('Deleted'));
     }
 }

@@ -49,7 +49,7 @@ class FichierController extends Controller
      */
     public function store(Request $request)
     {
-        //return $request;
+
         //
         $request->validate([
             'titre_en' => 'required|max:255',
@@ -86,7 +86,7 @@ class FichierController extends Controller
 
         Fichier::create($newFile);
 
-        return redirect()->route('fichier.index')->withSuccess('Fichier Publiée avec succès !');
+        return redirect()->route('fichier.index')->withSuccess(trans('successfully') . ' ' . trans('Added'));
 
     }
 
@@ -125,45 +125,48 @@ class FichierController extends Controller
      */
     public function update(Request $request, Fichier $fichier)
     {
+        //return $fichier;
+
 
         abort_unless($fichier->etudiant_id === Auth::user()->id, 401);
 
-        /*  $request->validate([
-             'titre_en' => 'required|max:200',
-             'titre_fr' => 'max:200',
-         ]);
-         $titre = [
-             'en' => $request->titre_en,
-         ];
+        $request->validate([
+            'titre_en' => 'required|max:200',
+            'titre_fr' => 'max:200',
+        ]);
+        $titre = [
+            'en' => $request->titre_en,
+        ];
 
-         if ($request->titre_fr != null) {
-             $titre = $titre + ['fr' => $request->titre_fr];
-         }
+        if ($request->titre_fr != null) {
+            $titre = $titre + ['fr' => $request->titre_fr];
+        }
 
-         $currentDate = Carbon::now()->format('Y-m-d');
+        $currentDate = Carbon::now()->format('Y-m-d');
 
-         //file
-         File::delete('fichiers/' . $fichier['file']);
+        //delete from dossier
+        File::delete('fichiers/' . $fichier['file']);
 
-         $fileName = '';
-         if ($request->has('file')) {
-             $fichier = $request->file;
-             $extension = strtolower($fichier->extension());
-             $fileName = time() . rand(1, 99999) . '.' . $extension; // generate new name
-             $fichier->getClientOriginalName = $fileName;
-             $fichier->move('fichiers', $fileName);
-         }
+        $fileName = '';
+        if ($request->has('file')) {
+            $newFichier = $request->file;
+
+            $extension = strtolower($newFichier->extension());
+            $fileName = time() . rand(1, 99999) . '.' . $extension; // generate new name
+            $newFichier->getClientOriginalName = $fileName;
+            $newFichier->move('fichiers', $fileName);
+        }
 
 
-         $fichier->update([
-             'titre' => $titre,
-             'date' => $currentDate,
-             'file' => $fileName
+        $fichier->update([
+            'titre' => $titre,
+            'date' => $currentDate,
+            'file' => $fileName
 
-         ]);
+        ]);
 
-         return redirect()->route('article.index')->withSuccess('Article Modifiée avec succès !'); */
-        return redirect()->route('fichier.index');
+        return redirect()->route('fichier.index')->withSuccess(trans('successfully') . ' ' . trans('Modified'));
+        //return redirect()->route('fichier.index');
 
     }
 
@@ -182,7 +185,7 @@ class FichierController extends Controller
         //from Storage /fichiers
         File::delete('fichiers/' . $fichier['file']);
 
-        return redirect()->route('fichier.index')->with('success', 'Document deleted successfully!');
+        return redirect()->route('fichier.index')->with('success', trans('successfully') . ' ' . trans('Deleted'));
 
     }
 }

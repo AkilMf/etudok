@@ -51,7 +51,7 @@ class AuthController extends Controller
         //connecter l'utilisateur en conservant son état d'authentification dans l'application.
         Auth::login($user);
         //return Auth::check();
-        return redirect()->intended(route('etudiant.welcome'))->withSuccess('You have been successfully signed in.');  // intended() : redirect vers la page recherchee
+        return redirect()->intended(route('etudiant.welcome'))->withSuccess(trans('successfully') . ' ' . trans('login'));  // intended() : redirect vers la page recherchee
 
     }
 

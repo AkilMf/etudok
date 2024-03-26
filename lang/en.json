@@ -41,7 +41,11 @@
     "Edit":"Edit",
     "Author":"Author",
     "Download":"Download",
-    "Upload":"Upload"
+    "Upload":"Upload",
+    "successfully":"",
+    "Modified":"Modified",
+    "Added":"Added",
+    "Deleted":"Deleted"
 
 
 }

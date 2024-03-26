@@ -94,7 +94,7 @@ class EtudiantController extends Controller
             'id' => $userId
         ]);
 
-        return redirect()->route('login')->with('success', "Votre compte a été crée avec succès :)"); // not view('..')
+        return redirect()->route('login')->with('success', trans('successfully') . ' ' . trans('Added')); // not view('..')
 
     }
 
@@ -179,7 +179,7 @@ class EtudiantController extends Controller
             'ville_id' => $request->ville_id
         ]);
 
-        return redirect()->route('etudiant.index')->with('success', "Des Informations de " . $request->nom . " ont été Modifiés avec succès :)"); // not view('..')
+        return redirect()->route('etudiant.index')->with('success', trans('successfully') . ' ' . trans('Modified')); // not view('..')
 
     }
 
@@ -193,7 +193,7 @@ class EtudiantController extends Controller
         $user = User::find($etudiant->id);
         $user->delete();
 
-        return redirect()->route('etudiant.index')->with('success', "l'Etudiant a été supprimé avec succès !");
+        return redirect()->route('etudiant.index')->with('success', trans('successfully') . ' ' . trans('Deleted'));
     }
 
 
