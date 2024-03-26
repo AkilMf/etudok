@@ -21,10 +21,17 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
     <link rel="stylesheet" href="{{ asset('/assets/style/style.css') }}">
+    <script src="{{ asset('/assets/js/main.js') }}"></script>
+
+    <!-- forum -->
+    <link href="https://use.fontawesome.com/releases/v5.0.1/css/all.css" rel="stylesheet">
+    <link href="{{ asset('/assets/style/forumStyle.css') }}" rel="stylesheet">
+    
     <title>{{ config('app.name')}} - @yield('title') </title>
 </head>
 
 <body>
+    @php  $locale = session()->get('locale'); @endphp  <!-- // pure php in blade -->
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -33,26 +40,81 @@
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <div class="collapse navbar-collapse justify-content-end custom-margin-right" id="navbarNav">
             <ul class="navbar-nav">
+                @auth
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('etudiant.welcome')}}">Accueil</a>
+                <p class="nav-link"> @lang('Welcome'), {{ Auth::user()->name }} <p>
+                </li>
+                @endauth
+                <li class="nav-item">
+                <p> <p>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('etudiant.index')}}">Liste des Etudiants</a>
+                    <a class="nav-link" href="{{route('etudiant.welcome')}}">@lang('Home')</a>
+                </li>
+                @auth
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('etudiant.index')}}">@lang('Students List')</a>
+                </li>
+                <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                                aria-expanded="false"> forum </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{route('article.index')}}">@lang('List of articles')</a></li>
+                                <li><a class="dropdown-item" href="{{route('article.create')}}">@lang('Add an articles')</a></li>
+                            
+                            </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
+                    <a class="nav-link" href="{{route('fichier.index')}}">@lang('Document area')</a>
                 </li>
+
+
+                @endauth
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">@lang('Contuct us')</a>
+                </li>
+                 
+                <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                                aria-expanded="false"><i class="fa-regular fa-user"></i></a>
+                            <ul class="dropdown-menu">
+                            @guest
+                                <li><a class="dropdown-item" href="{{route('login')}}">@lang('Login')</a></li>
+                                <li><a class="dropdown-item" href="{{route('etudiant.create')}}">@lang('Create an Account') <i class="fa-solid fa-user-plus"></i></a></li>
+                            @else
+                                <li><a class="dropdown-item" href="{{route('etudiant.show', Auth::user()->id)}}">@lang('My Account')</a></li>
+                                <li><a class="dropdown-item" href="{{route('logout')}}">@lang('Logout')</a></li>
+                            @endguest
+                            </ul>
+                </li>
+                <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                                aria-expanded="false"><i class="nav-link fa-solid fa-earth-americas"></i>{{ session()->get('locale') == '' ? '' : "$locale"}} </a>
+                            <ul class="dropdown-menu">
+                            
+                                <li><a class="dropdown-item" href="{{route('lang', 'fr')}}">FR</a></li>
+                                <li><a class="dropdown-item" href="{{route('lang', 'en')}}">EN</a></li>
+                            
+                            </ul>
+                </li>
+                
             </ul>
         </div>
     </nav>
+    <!--<div class="container my-5">
+
+         @guest
+            <p>Please log in with your account</p>
+        @endguest 
+    </div>-->
     <main>
 
 
-
         @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -74,8 +136,7 @@
 
     <footer>
 
-        &copy {{ date('Y')}} {{ config('app.name')}} - tous droit resérvé
-
+        &copy {{ date('Y')}} {{ config('app.name')}} - @lang('lang.text_copyright')
     </footer>
 
 

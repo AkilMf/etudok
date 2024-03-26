@@ -1,15 +1,15 @@
 @extends('layouts.app')
-@section('title','Liste etudiant')
+@section('title', trans('Welcome'))
 @section('content')
 
 <!-- Jumbotron -->
 <div class="jumbotron">
-    <h1 class="display-4">Bienvenue sur ETUDOK ! </h1>
-    <p class="lead">Restez en contact avec d'autres étudiants sur notre futur réseau social !</p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Take the Survey</a>
+    <h1 class="display-4">@lang('lang.text_welcome') ETUDOK ! </h1>
+    <p class="lead">@lang('lang.text_welcome_paragraph')</p>
+    <a class="btn btn-primary btn-lg" href="#" role="button">@lang('lang.text_survey_btn')</a>
     <hr class="my-4">
-    <p>Aidez nous afin d'améliorer nos services.</p>
-    <a class="btn btn-light btn-lg" href="{{route('etudiant.index')}}" role="button">Rejoignez-nous !</a>
+    <p>@lang('lang.text_marketing')</p>
+    <a class="btn btn-light btn-lg" href="{{route('etudiant.index')}}" role="button">@lang('lang.text_joinUs')</a>
 </div>
 
 

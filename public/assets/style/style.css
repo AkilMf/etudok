@@ -20,6 +20,7 @@ main {
   margin: 20px;
 }
 
+
 .card img {
   max-height: 200px;
   object-fit: cover;
@@ -39,6 +40,9 @@ footer {
 
 .container {
   margin-top: 50px;
+}
+.ls-d{
+  margin-top: 5px;
 }
 
 .btn-margin {
@@ -152,4 +156,12 @@ footer {
 
 .user-info-card .list-group-item {
   background-color: #f8f9fa;
+}
+
+.custom-margin-right{
+  margin-right: 20px;
+}
+
+.file-info-card{
+  width: 100%;
 }

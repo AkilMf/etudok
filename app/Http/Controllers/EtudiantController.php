@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Etudiant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\VilleController;
+use Illuminate\Validation\Rules\Password;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 
 class EtudiantController extends Controller
@@ -18,7 +21,7 @@ class EtudiantController extends Controller
         $villeController = app(VilleController::class);
         $villes = $villeController->index();
 
-        $etudiants = Etudiant::all();
+        $etudiants = Etudiant::select()->paginate(13);
         return view('etudiant.index', ['etudiants' => $etudiants, 'villes' => $villes]); //$tasks[0]->title
     }
 
@@ -38,6 +41,7 @@ class EtudiantController extends Controller
      */
     public function store(Request $request)
     {
+        //return $request;
 
         //return view('etudiant.index', ['data' => $request]); //$tas
         $request->validate(
@@ -45,9 +49,15 @@ class EtudiantController extends Controller
                 'nom' => 'required|string|max:50',
                 'adresse' => 'required|max:255',
                 'telephone' => 'required|regex:/^\+?[0-9]{1,}$/',
-                'email' => 'required|email|max:150',
+                'email' => 'required|email|max:150|unique:users,email',
                 'date_naissance' => 'required|date|date_format:Y-m-d',
-                'ville_id' => 'required|exists:villes,id'
+                'ville_id' => 'required|exists:villes,id',
+                'password' => [
+                    'required',
+                    'string',
+                    Password::min(6)->max(20)->mixedCase()->letters()->numbers()->symbols()
+                ],
+                'password_confirmation' => 'required|same:password'
 
             ],
             [   //Personalise les messages d'erreur
@@ -64,16 +74,27 @@ class EtudiantController extends Controller
 
         // Si validee
 
+        //Ajout user
+        $user = new User();
+        $user->email = $request->email;
+        $user->name = $request->nom;
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+        $userId = $user->id;
+
+        //  Ajout Etudiant
+        //mostafa@mostafa.ca / AJuik785@
         $etudiant = Etudiant::create([
-            'nom' => $request->nom,
+
             'adresse' => $request->adresse,
             'telephone' => $request->telephone,
-            'email' => $request->email,
             'date_naissance' => $request->date_naissance,
-            'ville_id' => $request->ville_id
+            'ville_id' => $request->ville_id,
+            'id' => $userId
         ]);
 
-        return redirect()->route('etudiant.index')->with('success', "l'étudiant a été ajouté avec succès :)"); // not view('..')
+        return redirect()->route('login')->with('success', "Votre compte a été crée avec succès :)"); // not view('..')
 
     }
 
@@ -96,6 +117,9 @@ class EtudiantController extends Controller
         //
         $villeController = app(VilleController::class);
         $villes = $villeController->index();
+        $etudiant['email'] = $etudiant->user->email; // ajout du champ A partir de la relation
+        $etudiant['nom'] = $etudiant->user->name; //
+        //return $etudiant;
         return view('etudiant.edit', ["etudiant" => $etudiant, "villes" => $villes]);
     }
 
@@ -104,6 +128,7 @@ class EtudiantController extends Controller
      */
     public function update(Request $request, Etudiant $etudiant)
     {
+
         //
         $request->validate(
             [
@@ -112,7 +137,13 @@ class EtudiantController extends Controller
                 'telephone' => 'required',
                 'email' => 'required|email|max:150',
                 'date_naissance' => 'required|date|date_format:Y-m-d',
-                'ville_id' => 'required|exists:villes,id'
+                'ville_id' => 'required|exists:villes,id',
+                'password' => [
+                    'required',
+                    'string',
+                    Password::min(6)->max(20)->mixedCase()->letters()->numbers()->symbols()
+                ],
+                'password_confirmation' => 'required|same:password'
 
             ],
             [   //Personalise les messages d'erreur
@@ -129,11 +160,21 @@ class EtudiantController extends Controller
 
         // Si validee
 
+        //Update user
+        $user = User::find($etudiant->id);
+
+        $user->email = $request->email;
+        $user->name = $request->nom;
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+        //$userId = $user->id;
+
+
         $etudiant->update([
-            'nom' => $request->nom,
+
             'adresse' => $request->adresse,
             'telephone' => $request->telephone,
-            'email' => $request->email,
             'date_naissance' => $request->date_naissance,
             'ville_id' => $request->ville_id
         ]);
@@ -149,7 +190,28 @@ class EtudiantController extends Controller
     {
         //
         $etudiant->delete();
+        $user = User::find($etudiant->id);
+        $user->delete();
 
         return redirect()->route('etudiant.index')->with('success', "l'Etudiant a été supprimé avec succès !");
     }
+
+
+    /**
+     * hash la dateNaissance d chaque user comme password temp
+     */
+    public function hashDateNaiss()
+    {
+        $etudiants = Etudiant::all();
+        foreach ($etudiants as $etudiant) {
+            $hashDateNaiss = Hash::make($etudiant->date_naissance);
+            //$etudiant->user->password = $hashDateNaiss;
+            $user = User::find($etudiant->id);
+            $user->update([
+                'password' => $hashDateNaiss
+            ]);
+        }
+    }
+
+
 }
