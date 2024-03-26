@@ -48,7 +48,7 @@
             <div class="border border-1px p-3 mt-2">
                 <div class="row mb-3 ">
                     <div class="col">
-                        <label class="form-label" for="titre_fr">@lang('Title') @lang('English'):</label>
+                        <label class="form-label" for="titre_fr">@lang('Title') @lang('French'):</label>
                         <input type="text" class="form-control" id="titre_fr" name="titre_fr" placeholder=""
                             value="{{(array_key_exists('fr', $article->titre)) ? old('titre_fr', $article->titre['fr']) : '' }}" />
                     </div>
@@ -57,7 +57,7 @@
 
                 <div class="row mb-3">
                     <div class="col">
-                        <label class="form-label" for="contenu_fr">@lang('Title') @lang('French') :</label>
+                        <label class="form-label" for="contenu_fr">@lang('Content') @lang('French') :</label>
                         <textarea type="text" rows="8" cols="10" class="form-control" name="contenu_fr" id="contenu_fr" placeholder="" 
                          value="{{(array_key_exists('fr', $article->contenu)) ? old('titre_fr', $article->contenu['fr']) : '' }}">{{(array_key_exists('fr', $article->contenu)) ? old('titre_fr', $article->contenu['fr']) : '' }}</textarea>
                          

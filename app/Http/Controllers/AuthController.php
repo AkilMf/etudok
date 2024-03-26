@@ -12,7 +12,7 @@ class AuthController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() // PassUI78@@
     {
         //
     }
